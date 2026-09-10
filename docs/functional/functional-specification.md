@@ -55,33 +55,33 @@ A fully serverless architecture:
 ### 2.2 Secondary Actor: Notification Consumer
 
 ```
-┌──────────────────────────────────────────────────┐
+┌───────────────────────────────────────────────────┐
 │            Notification Consumer                  │
-├──────────────────────────────────────────────────┤
+├───────────────────────────────────────────────────┤
 │  UC-6: Receive notification when a task is created│
 │  UC-7: Receive notification when a task changes   │
-└──────────────────────────────────────────────────┘
+└───────────────────────────────────────────────────┘
 ```
 
 ### 2.3 Use Case Diagram
 
 ```
     End User                    System                     Notification Consumer
-       │                          │                              │
-       │── UC-1: Create Task ──▶│                              │
-       │                         │── Publish event ──────────▶│
        │                         │                              │
-       │── UC-2: List Tasks ───▶│                              │
-       │◀── Task list ─────────│                              │
+       │── UC-1: Create Task ──▶ │                              │
+       │                         │── Publish event ────────────▶│
        │                         │                              │
-       │── UC-3: Get Task ─────▶│                              │
-       │◀── Task details ──────│                              │
+       │── UC-2: List Tasks ───▶ │                              │
+       │◀── Task list ─────────  │                              │
        │                         │                              │
-       │── UC-4: Update Task ──▶│                              │
-       │                         │── Publish event ──────────▶│
+       │── UC-3: Get Task ─────▶ │                              │
+       │◀── Task details ──────  │                              │
        │                         │                              │
-       │── UC-5: Delete Task ──▶│                              │
-       │                         │── Publish event ──────────▶│
+       │── UC-4: Update Task ──▶ │                              │
+       │                         │── Publish event ────────────▶│
+       │                         │                              │
+       │── UC-5: Delete Task ──▶ │                              │
+       │                         │── Publish event ────────────▶│
 ```
 
 ---

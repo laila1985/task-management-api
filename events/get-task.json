@@ -1,0 +1,7 @@
+{
+  "httpMethod": "GET",
+  "path": "/tasks/{id}",
+  "pathParameters": {
+    "id": "sample-task-id-123"
+  }
+}

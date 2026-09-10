@@ -1,0 +1,11 @@
+{
+  "body": "{\"title\":\"Updated Task Title\",\"status\":\"IN_PROGRESS\"}",
+  "httpMethod": "PUT",
+  "path": "/tasks/{id}",
+  "pathParameters": {
+    "id": "sample-task-id-123"
+  },
+  "headers": {
+    "Content-Type": "application/json"
+  }
+}

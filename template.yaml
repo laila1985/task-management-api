@@ -1,0 +1,157 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Task Management API - Serverless Java Application
+
+Globals:
+  Function:
+    Runtime: java21
+    MemorySize: 512
+    Timeout: 30
+    Environment:
+      Variables:
+        TABLE_NAME: !Ref TasksTable
+    Tracing: Active
+
+Resources:
+  # ==========================================
+  # DynamoDB Table
+  # ==========================================
+  TasksTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: TasksTable
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+        - AttributeName: status
+          AttributeType: S
+        - AttributeName: createdAt
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: StatusIndex
+          KeySchema:
+            - AttributeName: status
+              KeyType: HASH
+            - AttributeName: createdAt
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+
+  # ==========================================
+  # Lambda Functions
+  # ==========================================
+
+  CreateTaskFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: com.example.tasks.handler.CreateTaskHandler::handleRequest
+      Description: Creates a new task in DynamoDB
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TasksTable
+      Events:
+        CreateTask:
+          Type: Api
+          Properties:
+            Path: /tasks
+            Method: post
+            Cors: true
+
+  GetTaskFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: com.example.tasks.handler.GetTaskHandler::handleRequest
+      Description: Gets a task by ID from DynamoDB
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref TasksTable
+      Events:
+        GetTask:
+          Type: Api
+          Properties:
+            Path: /tasks/{id}
+            Method: get
+            Cors: true
+
+  ListTasksFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: com.example.tasks.handler.ListTasksHandler::handleRequest
+      Description: Lists all tasks, optionally filtered by status
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref TasksTable
+      Events:
+        ListTasks:
+          Type: Api
+          Properties:
+            Path: /tasks
+            Method: get
+            Cors: true
+
+  UpdateTaskFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: com.example.tasks.handler.UpdateTaskHandler::handleRequest
+      Description: Updates an existing task in DynamoDB
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TasksTable
+      Events:
+        UpdateTask:
+          Type: Api
+          Properties:
+            Path: /tasks/{id}
+            Method: put
+            Cors: true
+
+  DeleteTaskFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: com.example.tasks.handler.DeleteTaskHandler::handleRequest
+      Description: Deletes a task from DynamoDB
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TasksTable
+      Events:
+        DeleteTask:
+          Type: Api
+          Properties:
+            Path: /tasks/{id}
+            Method: delete
+            Cors: true
+
+# ==========================================
+# Outputs
+# ==========================================
+Outputs:
+  TaskApi:
+    Description: API Gateway endpoint URL for Task Management API
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/prod/"
+  TasksTable:
+    Description: DynamoDB Table Name
+    Value: !Ref TasksTable
+  CreateTaskFunction:
+    Description: Create Task Lambda Function ARN
+    Value: !GetAtt CreateTaskFunction.Arn
+  GetTaskFunction:
+    Description: Get Task Lambda Function ARN
+    Value: !GetAtt GetTaskFunction.Arn
+  ListTasksFunction:
+    Description: List Tasks Lambda Function ARN
+    Value: !GetAtt ListTasksFunction.Arn
+  UpdateTaskFunction:
+    Description: Update Task Lambda Function ARN
+    Value: !GetAtt UpdateTaskFunction.Arn
+  DeleteTaskFunction:
+    Description: Delete Task Lambda Function ARN
+    Value: !GetAtt DeleteTaskFunction.Arn

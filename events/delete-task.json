@@ -1,0 +1,7 @@
+{
+  "httpMethod": "DELETE",
+  "path": "/tasks/{id}",
+  "pathParameters": {
+    "id": "sample-task-id-123"
+  }
+}

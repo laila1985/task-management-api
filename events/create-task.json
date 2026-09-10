@@ -1,0 +1,8 @@
+{
+  "body": "{\"title\":\"My First Task\",\"description\":\"This is a sample task description\"}",
+  "httpMethod": "POST",
+  "path": "/tasks",
+  "headers": {
+    "Content-Type": "application/json"
+  }
+}

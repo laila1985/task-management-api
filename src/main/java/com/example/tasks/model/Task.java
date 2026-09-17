@@ -2,6 +2,8 @@ package com.example.tasks.model;
 
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSecondaryPartitionKey;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSecondarySortKey;
 
 import java.time.Instant;
 
@@ -67,6 +69,7 @@ public class Task {
         this.description = description;
     }
 
+    @DynamoDbSecondaryPartitionKey(indexNames = "StatusIndex")
     public String getStatus() {
         return status;
     }
@@ -75,6 +78,7 @@ public class Task {
         this.status = status;
     }
 
+    @DynamoDbSecondarySortKey(indexNames = "StatusIndex")
     public Instant getCreatedAt() {
         return createdAt;
     }

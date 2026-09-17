@@ -7,7 +7,6 @@ target/
 *.ipr
 *.iws
 .vscode/
-.settings/
 .project
 .classpath
 *.swp

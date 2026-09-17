@@ -1,0 +1,24 @@
+# Docker Compose definition for the Task Management API's local dependencies.
+#
+# Currently provides DynamoDB Local, the database used by the Lambda handlers
+# when running/tests locally (without deploying to AWS).
+#
+# Usage:
+#   docker compose up -d      # start
+#   docker compose down       # stop & remove
+#   docker compose ps         # check status
+#
+# Or use the convenience script:
+#   .\scripts\dynamodb.ps1 start|stop|status|restart
+
+services:
+  dynamodb:
+    image: amazon/dynamodb-local:latest
+    container_name: taskmgmt-dynamodb
+    ports:
+      - "8000:8000"
+    # -sharedDb: all AWS regions share the same database (avoids region-mismatch
+    #            confusion when the SDK connects with a specific region).
+    # -inMemory: data is not persisted to disk (matches the ephemeral nature of
+    #            local dev/test runs).
+    command: "-jar DynamoDBLocal.jar -sharedDb -inMemory"
